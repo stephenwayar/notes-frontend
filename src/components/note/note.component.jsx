@@ -8,7 +8,7 @@ const Note = ({ note, toggleImportance }) => {
     <div className='my-2 mx-1'>
       <li>
         {note.content} 
-        <button className='bg-gray-500 text-sm py-1 px-2 ml-2 rounded text-white shadow-lg' onClick={toggleImportance}><i>{label}</i></button>
+        <button className='bg-gray-500 transition ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300 text-sm py-1 px-2 ml-2 rounded text-white shadow-lg' onClick={toggleImportance}><i>{label}</i></button>
       </li>
     </div>
   )
