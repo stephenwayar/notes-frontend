@@ -16,11 +16,18 @@ const App = () => {
   useEffect(() => {
     noteService
       .getAll()
-      .then(res => {
-      console.log("Promise fufilled");
-      setNotes(res)
-    })
+      .then(res => setNotes(res))
   },[])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+
+    if(loggedUserJSON){
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
 
   const notesToShow = showAll 
     ? notes
@@ -32,7 +39,7 @@ const App = () => {
     try{
       const user = await auth.login({ username, password })
       noteService.setToken(user.token)
-      console.log(user.token)
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
@@ -77,7 +84,7 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
-      .catch(error => {
+      .catch(_error => {
         setErrorMessage(
           `Note '${note.content}' was already removed from server`
         )
