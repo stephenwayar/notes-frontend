@@ -3,6 +3,9 @@ import Note from "./components/note/note.component"
 import Notification from "./components/notification/notification";
 import noteService from "./services/notes"
 import auth from "./services/auth";
+import LoginForm from "./components/loginForm/loginForm";
+import AddNoteForm from "./components/addNote/addNote";
+import Togglable from "./components/togglable/togglable";
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -12,6 +15,7 @@ const App = () => {
   const [newNotes, setNewNote] = useState("")
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     noteService
@@ -96,32 +100,23 @@ const App = () => {
   }
 
   const handleChange = e => setNewNote(e.target.value)
-  
-  const loginForm = () => (
-    <form onSubmit={handleLogin} className="space-y-3 mt-3">
-      <div>
-        <label>Username</label>
 
-        <input placeholder="Enter your Username" type='text' className="placeholder:text-sm border-2 rounded-md border-blue-500 px-2 mx-2" value={username} onChange={({ target }) => setUsername(target.value)}/>
-      </div>
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
-      <div>
-        <label>Password</label>
-
-        <input placeholder="Enter your Password" type='password' className="placeholder:text-sm border-2 rounded-md border-blue-500 px-2 mx-2" value={password} onChange={({ target }) => setPassword(target.value)}/>
-      </div>
-
-      <button className="px-4 py-1 bg-green-500 hover:bg-green-600 rounded-md text-white shadow-md hover:shadow-lg transition duration-75 delay-75 ease-linear">Login</button>
-    </form>
-  )
-
-  const addNoteForm = () => (
-    <form className="mt-3" onSubmit={addNote}>
-      <label>Add Note:</label>
-      <input className="border-2 rounded-md border-blue-500 px-2 mx-2" value={newNotes} onChange={handleChange}/>
-      <button className="bg-blue-500 transition ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-sm py-2 px-2 rounded text-white shadow-lg">Submit</button>
-    </form>
-  )
+    return (
+      <Togglable buttonLabel="Click to login">
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleLogin={handleLogin}
+        />
+      </Togglable>
+    )
+  }
 
   return(
     <div className="h-auto w-1/2 mx-auto pt-10 pb-20 px-5 mt-10 rounded-md shadow-2xl border-2 border-gray-300">
@@ -133,7 +128,11 @@ const App = () => {
         ? loginForm() : 
         <div>
           <p>Logged in as {user.name}</p>
-          { addNoteForm() }
+          { 
+            <Togglable buttonLabel="Add Note">
+              <AddNoteForm addNote={addNote} newNotes={newNotes} handleChange={handleChange} />
+            </Togglable>
+          }
         </div>
       }
 
