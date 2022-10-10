@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Note from "./components/note/note.component"
 import Notification from "./components/notification/notification";
 import noteService from "./services/notes"
@@ -15,6 +15,7 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
+  const noteFormRef = useRef()
 
   useEffect(() => {
     noteService
@@ -99,13 +100,13 @@ const App = () => {
         <div>
           <p>Logged in as {user.name}</p>
           { 
-            <Togglable buttonLabel="Add Note">
-              <AddNoteForm notes={notes} setNotes={setNotes} setErrorMessage={setErrorMessage} />
+            <Togglable buttonLabel="Add Note" ref={noteFormRef}>
+              <AddNoteForm noteFormRef={noteFormRef} notes={notes} setNotes={setNotes} setErrorMessage={setErrorMessage} />
             </Togglable>
           }
         </div>
       }
-
+ 
       {/* Show important notes feature */}
       <button className="bg-blue-500 transition ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 text-sm mt-3 py-2 px-2 rounded text-white shadow-lg" onClick={() => (setShowAll(!showAll))}>
         Show {showAll ? "important" : "all"}
