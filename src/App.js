@@ -33,7 +33,7 @@ const App = () => {
     }
   }, [])
 
-  const notesToShow = showAll 
+  const notesToShow = showAll
     ? notes
     : notes.filter(note => (note.important === true))
 
@@ -95,7 +95,7 @@ const App = () => {
 
       <Notification message={errorMessage} />
 
-      { user === null 
+      { user === null
         ? loginForm() : 
         <div>
           <p>Logged in as {user.name}</p>
